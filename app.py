@@ -118,7 +118,7 @@ def main():
     if st.button("Reiniciar"):
         st.session_state.texto = ''
         st.session_state.archivo = None
-        st.experimental_rerun()
+        st.rerun()
 
 if __name__ == '__main__':
     main()
