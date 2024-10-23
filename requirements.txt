@@ -5,4 +5,3 @@ nltk
 unidecode
 scikit-learn
 NLTK
-nltk.tokenize
