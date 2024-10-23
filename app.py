@@ -5,6 +5,13 @@ import nltk
 from nltk.tokenize import word_tokenize
 from unidecode import unidecode
 
+nltk.download('punkt')
+nltk.download('stopwords')
+nltk.download('wordnet')
+nltk.download('omw-1.4')
+nltk.download('cess_esp')
+nltk.download('averaged_perceptron_tagger')
+
 def aumentar_peso_verbos(tokens, factor=3):
     nuevo_texto = []
     for palabra in tokens:
