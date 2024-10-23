@@ -5,14 +5,6 @@ import nltk
 from nltk.tokenize import word_tokenize
 from unidecode import unidecode
 
-nltk.download('punkt')
-nltk.download('stopwords')
-nltk.download('wordnet')
-nltk.download('omw-1.4')
-nltk.download('cess_esp')
-nltk.download('averaged_perceptron_tagger')
-nltk.download('punkt_tab')
-
 def aumentar_peso_verbos(tokens, factor=3):
     nuevo_texto = []
     for palabra in tokens:
@@ -32,6 +24,7 @@ def preprocesar_texto(texto):
     palabras_filtradas = [unidecode(palabra.lower()) for palabra in palabras if palabra.isalpha()]
     return " ".join(palabras_filtradas)
 
+
 def main():
 
     st.title("Cluster Capacidad")
@@ -47,18 +40,24 @@ def main():
         """,unsafe_allow_html=True
     )
 
-    menu = st.sidebar.radio("Modo de uso", ["Prediccion individual","Predicciones por archivo"])
+    menu = st.sidebar.radio("Modo de uso", ["Calculo individual","Calculo por archivo"])
         
     model = joblib.load('kmeans_model.pkl')
     scaler = joblib.load('scaler.pkl')
     vectorizer = joblib.load('vectorizer.pkl')
 
-    if menu == "Prediccion individual":
+    v_reinicio_1 = False
+
+    if menu == "Calculo individual":
 
         #num_features = model.cluster_centers_.shape[1]  # Número de características esperadas por el modelo
         #     
         if 'texto' not in st.session_state:
             st.session_state.texto = ''
+        if 'reinicio_titulo' not in st.session_state:
+            st.session_state.reinicio_titulo = False
+        if 'reinicio_archivo' not in st.session_state:
+            st.session_state.reinicio_archivo = False
 
         col1, col2 = st.columns([1,3])
 
@@ -67,10 +66,10 @@ def main():
             servicio = st.selectbox("Tipo de servicio", opciones)
     
         with col2:
-            user_input_org = st.text_input('Titulo',value = st.session_state.texto)
+            user_input_org = st.text_input('Titulo', st.session_state.texto)
             st.session_state.texto = user_input_org
-    
-        if st.button('Predecir Cluster'):
+
+        if st.button('Estimar Tiempo Máximo de Solución'):
             if user_input_org:
                 user_input = preprocesar_texto(user_input_org)
                 user_vector = vectorizer.transform([user_input])
@@ -85,13 +84,22 @@ def main():
                 st.success(f"El tiempo estimado de la tarea es de : {tiempo} minutos")
             else:
                 st.warning("Titulo no definido")
+
+            st.session_state.reinicio_titulo = True
+
+        if st.session_state.reinicio_titulo:
+            if st.button("Reiniciar"):
+                st.session_state.reinicio_titulo = False
+                st.session_state.texto = ''
+                user_input_org = ''   
+                st.experimental_rerun()
             
     
-    elif menu == "Predicciones por archivo":
+    elif menu == "Calculo por archivo":
 
         archivo = st.file_uploader("Carga de archivo CSV", type=["csv"])
 
-        if st.button('Predecir Cluster'):
+        if st.button('Estimar Tiempo Máximo de Solución'):
 
             if archivo is not None:
                 st.session_state.archivo = archivo
@@ -123,10 +131,15 @@ def main():
             else:
                 st.warning("Archivo no cargado")
 
-    if st.button("Reiniciar"):
-        st.session_state.texto = ''
-        st.session_state.archivo = None
-        st.rerun()
+
+            st.session_state.reinicio_archivo = True
+
+        if st.session_state.reinicio_archivo:
+            if st.button("Reiniciar"):
+                st.session_state.reinicio_archivo = False
+                st.session_state.archivo = ''
+                archivo = None  
+                st.experimental_rerun()
 
 if __name__ == '__main__':
     main()
