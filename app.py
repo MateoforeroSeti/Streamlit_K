@@ -92,7 +92,7 @@ def main():
                 st.session_state.reinicio_titulo = False
                 st.session_state.texto = ''
                 user_input_org = ''   
-                st.experimental_rerun()
+                st.rerun()
             
     
     elif menu == "Calculo por archivo":
@@ -139,7 +139,7 @@ def main():
                 st.session_state.reinicio_archivo = False
                 st.session_state.archivo = ''
                 archivo = None  
-                st.experimental_rerun()
+                st.rerun()
 
 if __name__ == '__main__':
     main()
