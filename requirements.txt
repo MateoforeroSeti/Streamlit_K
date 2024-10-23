@@ -3,3 +3,4 @@ joblib
 pandas
 nltk
 unidecode
+sklearn
