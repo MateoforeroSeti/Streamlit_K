@@ -11,6 +11,7 @@ nltk.download('wordnet')
 nltk.download('omw-1.4')
 nltk.download('cess_esp')
 nltk.download('averaged_perceptron_tagger')
+nltk.download('punkt_tab')
 
 def aumentar_peso_verbos(tokens, factor=3):
     nuevo_texto = []
