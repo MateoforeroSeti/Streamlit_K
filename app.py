@@ -26,7 +26,7 @@ def preprocesar_texto(texto):
 
 
 def main():
-
+    st.set_page_config(layout='wide')
     st.title("Cluster Capacidad")
     st.write("Ingresa los datos para predecir el cluster según el modelo entrenado.")
 
