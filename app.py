@@ -5,6 +5,8 @@ import nltk
 from nltk.tokenize import word_tokenize
 from unidecode import unidecode
 
+nltk.download('punkt_tab')
+
 def aumentar_peso_verbos(tokens, factor=3):
     nuevo_texto = []
     for palabra in tokens:
